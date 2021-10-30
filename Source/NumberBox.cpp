@@ -26,15 +26,12 @@ juce::TextEditor* CustomLabel::createEditorComponent()
 
 void CustomLabel::editorShown (juce::TextEditor* editor)
 {
+    editor->setMouseCursor (juce::MouseCursor::NoCursor);
     editor->clear();
     editor->setText (initialPressedKey);
 }
 
 //==============================================================================
-CustomLookAndFeel::CustomLookAndFeel()
-{
-}
-
 juce::CaretComponent* CustomLookAndFeel::createCaretComponent (juce::Component* keyFocusOwner)
 {
     auto caret = new juce::CaretComponent (keyFocusOwner);
@@ -52,7 +49,6 @@ CustomLabel* CustomLookAndFeel::createSliderTextBox (juce::Slider& slider)
     l->setColour (juce::Label::textColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::textWhenEditingColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::outlineWhenEditingColourId, juce::Colours::transparentWhite);
-    l->setInterceptsMouseClicks (false, false);
     l->setFont (18);
                 
     return l;
@@ -66,7 +62,7 @@ NumberBox::NumberBox()
     setSliderStyle (juce::Slider::LinearBarVertical);
     setTextBoxIsEditable (false);
     setVelocityBasedMode (true);
-    setVelocityModeParameters (0.5, 1, 0.09, false);
+    setVelocityModeParameters (0.8, 1, 0.09, false);
     setRange (0, 100, 0.01);
     setValue (50.0);
     setDoubleClickReturnValue (true, 50.0);
@@ -82,6 +78,11 @@ NumberBox::NumberBox()
         else
             setNumDecimalPlacesToDisplay(0);
     };
+}
+
+NumberBox::~NumberBox()
+{
+    setLookAndFeel (nullptr);
 }
 
 void NumberBox::paint (juce::Graphics& g)
@@ -139,7 +140,7 @@ bool NumberBox::keyPressed (const juce::KeyPress& k, juce::Component* c)
         if (k.getTextCharacter() == numChar)
         {
             setTextBoxIsEditable (true);
-            CustomLabel::initialPressedKey = juce::String::charToString (k.getTextCharacter());
+            CustomLabel::initialPressedKey = juce::String::charToString (numChar);
             showTextBox();
             setTextBoxIsEditable (false);
 

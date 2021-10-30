@@ -25,8 +25,6 @@ public:
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    CustomLookAndFeel();
-    
     juce::CaretComponent* createCaretComponent (juce::Component* keyFocusOwner) override;
     CustomLabel* createSliderTextBox (juce::Slider& slider) override;
 };
@@ -35,7 +33,8 @@ public:
 class NumberBox  : public juce::Slider, public juce::KeyListener
 {
 public:
-    NumberBox();    
+    NumberBox();
+    ~NumberBox();
     
     void paint (juce::Graphics& g) override;
     void mouseDown (const juce::MouseEvent& event) override;
@@ -44,8 +43,6 @@ public:
     
 private:
     CustomLookAndFeel customLookAndFeel;
-    
-    juce::Colour grey = juce::Colour::fromFloatRGBA (0.42f, 0.42f, 0.42f, 1.f);
-    
+        
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NumberBox)
 };

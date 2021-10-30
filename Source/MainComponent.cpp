@@ -34,7 +34,7 @@ void MainComponent::resized()
 {
     auto bounds = getLocalBounds().withSizeKeepingCentre (80, 30);
     
-    blueBox.setBounds (bounds.withX (50));
-    greenBox.setBounds (bounds.withX (205));
+    blueBox.setBounds   (bounds.withX (50));
+    greenBox.setBounds  (bounds.withX (205));
     yellowBox.setBounds (bounds.withX (360));
 }
