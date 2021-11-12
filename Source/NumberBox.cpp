@@ -68,7 +68,6 @@ NumberBox::NumberBox()
     setDoubleClickReturnValue (true, 50.0);
     setTextValueSuffix (" %");
     setWantsKeyboardFocus (true);
-    addKeyListener (this);
     onValueChange = [&]()
     {
         if (getValue() < 10)
@@ -131,7 +130,7 @@ void NumberBox::mouseUp (const juce::MouseEvent& event)
     setMouseCursor (juce::MouseCursor::NormalCursor);
 }
 
-bool NumberBox::keyPressed (const juce::KeyPress& k, juce::Component* c)
+bool NumberBox::keyPressed (const juce::KeyPress& k)
 {
     char numChars[] = "0123456789";
 
