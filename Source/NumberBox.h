@@ -30,7 +30,7 @@ public:
 };
 
 //==============================================================================
-class NumberBox  : public juce::Slider, public juce::KeyListener
+class NumberBox  : public juce::Slider
 {
 public:
     NumberBox();
@@ -39,7 +39,7 @@ public:
     void paint (juce::Graphics& g) override;
     void mouseDown (const juce::MouseEvent& event) override;
     void mouseUp (const juce::MouseEvent& event) override;
-    bool keyPressed (const juce::KeyPress& k, juce::Component* c) override;
+    bool keyPressed (const juce::KeyPress& k) override;
     
 private:
     CustomLookAndFeel customLookAndFeel;
