@@ -19,7 +19,7 @@ juce::TextEditor* CustomLabel::createEditorComponent()
     ed->setJustification (juce::Justification::centred);
     ed->setColour (juce::TextEditor::backgroundColourId, juce::Colours::transparentWhite);
     ed->setInputRestrictions (5, "0123456789.");
-    ed->setIndents (4, -1);
+    ed->setIndents (4, 0);
 
     return ed;
 }
@@ -86,31 +86,48 @@ NumberBox::~NumberBox()
 
 void NumberBox::paint (juce::Graphics& g)
 {
-    if (hasKeyboardFocus (false))
+    juce::Slider::paint (g);
+
+    if (hasKeyboardFocus (true))
     {
         auto bounds = getLocalBounds().toFloat();
-        auto h = bounds.getHeight();
-        auto w = bounds.getWidth();
-        auto len = juce::jmin (h, w) * 0.15f;
-        auto thick  = len / 1.8f;
+        auto len    = juce::jmin (bounds.getHeight(), bounds.getWidth()) * 0.15f;
+        auto thick  = len * 0.5f;
+        
+        auto topLeft     = bounds.getTopLeft();
+        auto topRight    = bounds.getTopRight();
+        auto bottomLeft  = bounds.getBottomLeft();
+        auto bottomRight = bounds.getBottomRight();
         
         g.setColour (findColour (juce::Slider::textBoxOutlineColourId));
         
-        // Left top
-        g.drawLine (0.0f, 0.0f, 0.0f, len, thick);
-        g.drawLine (0.0f, 0.0f, len, 0.0f, thick);
+        juce::Path topLeftPath;
+        topLeftPath.startNewSubPath (topLeft);
+        topLeftPath.lineTo (topLeft.x, topLeft.y + len);
+        topLeftPath.startNewSubPath (topLeft);
+        topLeftPath.lineTo (topLeft.x + len, topLeft.y);
+        g.strokePath (topLeftPath, juce::PathStrokeType (thick));
         
-        // Left bottom
-        g.drawLine (0.0f, h, 0.0f, h - len, thick);
-        g.drawLine (0.0f, h, len, h, thick);
+        juce::Path topRightPath;
+        topRightPath.startNewSubPath (topRight);
+        topRightPath.lineTo (topRight.x, topRight.y + len);
+        topRightPath.startNewSubPath (topRight);
+        topRightPath.lineTo (topRight.x - len, topRight.y);
+        g.strokePath (topRightPath, juce::PathStrokeType (thick));
         
-        // Right top
-        g.drawLine (w, 0.0f, w, len, thick);
-        g.drawLine (w, 0.0f, w - len, 0.0f, thick);
+        juce::Path bottomLeftPath;
+        bottomLeftPath.startNewSubPath (bottomLeft);
+        bottomLeftPath.lineTo (bottomLeft.x, bottomLeft.y - len);
+        bottomLeftPath.startNewSubPath (bottomLeft);
+        bottomLeftPath.lineTo (bottomLeft.x + len, bottomLeft.y);
+        g.strokePath (bottomLeftPath, juce::PathStrokeType (thick));
         
-        // Right bottom
-        g.drawLine (w, h, w, h - len, thick);
-        g.drawLine (w, h, w - len, h, thick);
+        juce::Path bottomRightPath;
+        bottomRightPath.startNewSubPath (bottomRight);
+        bottomRightPath.lineTo (bottomRight.x, bottomRight.y - len);
+        bottomRightPath.startNewSubPath (bottomRight);
+        bottomRightPath.lineTo (bottomRight.x - len, bottomRight.y);
+        g.strokePath (bottomRightPath, juce::PathStrokeType (thick));
     }
 }
 
