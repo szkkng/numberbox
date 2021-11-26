@@ -38,3 +38,4 @@ void MainComponent::resized()
     greenBox.setBounds  (bounds.withX (205));
     yellowBox.setBounds (bounds.withX (360));
 }
+

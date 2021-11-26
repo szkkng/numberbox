@@ -86,49 +86,45 @@ NumberBox::~NumberBox()
 
 void NumberBox::paint (juce::Graphics& g)
 {
-    juce::Slider::paint (g);
+    if (hasKeyboardFocus (false))
+        drawFocusMark (g, findColour (juce::Slider::textBoxOutlineColourId));
+}
 
-    if (hasKeyboardFocus (true))
+void NumberBox::drawFocusMark (juce::Graphics &g, juce::Colour colour)
+{
+    g.setColour (colour);
+
+    auto bounds = getLocalBounds().toFloat();
+    auto length = juce::jmin (bounds.getHeight(), bounds.getWidth()) * 0.15f;
+    auto thick  = length * 0.5f;
+    auto radian = 0.0f;
+
+    auto topL    = bounds.getTopLeft();
+    auto topR    = bounds.getTopRight();
+    auto bottomR = bounds.getBottomRight();
+    auto bottomL = bounds.getBottomLeft();
+
+    std::array<juce::Point<float>, 4> corners { topL, topR, bottomR, bottomL };
+
+    // Draw in clockwise order, starting from top left.
+    for (auto corner : corners)
     {
-        auto bounds = getLocalBounds().toFloat();
-        auto len    = juce::jmin (bounds.getHeight(), bounds.getWidth()) * 0.15f;
-        auto thick  = len * 0.5f;
-        
-        auto topLeft     = bounds.getTopLeft();
-        auto topRight    = bounds.getTopRight();
-        auto bottomLeft  = bounds.getBottomLeft();
-        auto bottomRight = bounds.getBottomRight();
-        
-        g.setColour (findColour (juce::Slider::textBoxOutlineColourId));
-        
-        juce::Path topLeftPath;
-        topLeftPath.startNewSubPath (topLeft);
-        topLeftPath.lineTo (topLeft.x, topLeft.y + len);
-        topLeftPath.startNewSubPath (topLeft);
-        topLeftPath.lineTo (topLeft.x + len, topLeft.y);
-        g.strokePath (topLeftPath, juce::PathStrokeType (thick));
-        
-        juce::Path topRightPath;
-        topRightPath.startNewSubPath (topRight);
-        topRightPath.lineTo (topRight.x, topRight.y + len);
-        topRightPath.startNewSubPath (topRight);
-        topRightPath.lineTo (topRight.x - len, topRight.y);
-        g.strokePath (topRightPath, juce::PathStrokeType (thick));
-        
-        juce::Path bottomLeftPath;
-        bottomLeftPath.startNewSubPath (bottomLeft);
-        bottomLeftPath.lineTo (bottomLeft.x, bottomLeft.y - len);
-        bottomLeftPath.startNewSubPath (bottomLeft);
-        bottomLeftPath.lineTo (bottomLeft.x + len, bottomLeft.y);
-        g.strokePath (bottomLeftPath, juce::PathStrokeType (thick));
-        
-        juce::Path bottomRightPath;
-        bottomRightPath.startNewSubPath (bottomRight);
-        bottomRightPath.lineTo (bottomRight.x, bottomRight.y - len);
-        bottomRightPath.startNewSubPath (bottomRight);
-        bottomRightPath.lineTo (bottomRight.x - len, bottomRight.y);
-        g.strokePath (bottomRightPath, juce::PathStrokeType (thick));
-    }
+        juce::Path path;
+
+        // vertical path
+        path.startNewSubPath (corner);
+        path.lineTo          (corner.x, corner.y + length);
+
+        // horizontal path
+        path.startNewSubPath (corner);
+        path.lineTo          (corner.x + length, corner.y);
+
+        g.strokePath (path,
+                      juce::PathStrokeType (thick),
+                      juce::AffineTransform::rotation (radian, corner.x, corner.y));
+
+        radian += juce::MathConstants<float>::halfPi;
+    };
 }
 
 void NumberBox::mouseDown (const juce::MouseEvent& event)
