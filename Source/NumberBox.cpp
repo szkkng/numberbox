@@ -10,7 +10,7 @@
 
 #include "NumberBox.h"
 
-juce::String CustomLabel::initialPressedKey = "";
+juce::String CustomLabel::initialValue = "";
 
 juce::TextEditor* CustomLabel::createEditorComponent()
 {
@@ -28,7 +28,7 @@ void CustomLabel::editorShown (juce::TextEditor* editor)
 {
     editor->setMouseCursor (juce::MouseCursor::NoCursor);
     editor->clear();
-    editor->setText (initialPressedKey);
+    editor->setText (initialValue);
 }
 
 //==============================================================================
@@ -49,6 +49,7 @@ CustomLabel* CustomLookAndFeel::createSliderTextBox (juce::Slider& slider)
     l->setColour (juce::Label::textColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::textWhenEditingColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::outlineWhenEditingColourId, juce::Colours::transparentWhite);
+    l->setInterceptsMouseClicks (false, false);
     l->setFont (18);
                 
     return l;
@@ -60,7 +61,7 @@ NumberBox::NumberBox()
     setLookAndFeel (&customLookAndFeel);
     setColour (juce::Slider::trackColourId, juce::Colours::transparentWhite);
     setSliderStyle (juce::Slider::LinearBarVertical);
-    setTextBoxIsEditable (false);
+    setTextBoxIsEditable (true);
     setVelocityBasedMode (true);
     setVelocityModeParameters (0.8, 1, 0.09, false);
     setRange (0, 100, 0.01);
@@ -86,7 +87,7 @@ NumberBox::~NumberBox()
 
 void NumberBox::paint (juce::Graphics& g)
 {
-    if (hasKeyboardFocus (false))
+    if (hasKeyboardFocus (true))
         drawFocusMark (g, findColour (juce::Slider::textBoxOutlineColourId));
 }
 
@@ -145,19 +146,12 @@ void NumberBox::mouseUp (const juce::MouseEvent& event)
 
 bool NumberBox::keyPressed (const juce::KeyPress& k)
 {
-    char numChars[] = "0123456789";
-
-    for (auto numChar : numChars)
+    if ('0' <= k.getKeyCode() && k.getKeyCode() <= '9')
     {
-        if (k.getTextCharacter() == numChar)
-        {
-            setTextBoxIsEditable (true);
-            CustomLabel::initialPressedKey = juce::String::charToString (numChar);
-            showTextBox();
-            setTextBoxIsEditable (false);
+        CustomLabel::initialValue = juce::String::charToString (k.getTextCharacter());
+        showTextBox();
 
-            return true;
-        }
+        return true;
     }
 
     return false;

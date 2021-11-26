@@ -15,7 +15,7 @@
 class CustomLabel : public juce::Label
 {
 public:
-    static juce::String initialPressedKey;
+    static juce::String initialValue;
 
     juce::TextEditor* createEditorComponent() override;
     void editorShown (juce::TextEditor* editor) override;
