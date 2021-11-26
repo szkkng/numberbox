@@ -87,31 +87,44 @@ NumberBox::~NumberBox()
 void NumberBox::paint (juce::Graphics& g)
 {
     if (hasKeyboardFocus (false))
+        drawFocusMark (g, findColour (juce::Slider::textBoxOutlineColourId));
+}
+
+void NumberBox::drawFocusMark (juce::Graphics &g, juce::Colour colour)
+{
+    g.setColour (colour);
+
+    auto bounds = getLocalBounds().toFloat();
+    auto length = juce::jmin (bounds.getHeight(), bounds.getWidth()) * 0.15f;
+    auto thick  = length * 0.5f;
+    auto radian = 0.0f;
+
+    auto topL    = bounds.getTopLeft();
+    auto topR    = bounds.getTopRight();
+    auto bottomR = bounds.getBottomRight();
+    auto bottomL = bounds.getBottomLeft();
+
+    std::array<juce::Point<float>, 4> corners { topL, topR, bottomR, bottomL };
+
+    // Draw in clockwise order, starting from top left.
+    for (auto corner : corners)
     {
-        auto bounds = getLocalBounds().toFloat();
-        auto h = bounds.getHeight();
-        auto w = bounds.getWidth();
-        auto len = juce::jmin (h, w) * 0.15f;
-        auto thick  = len / 1.8f;
-        
-        g.setColour (findColour (juce::Slider::textBoxOutlineColourId));
-        
-        // Left top
-        g.drawLine (0.0f, 0.0f, 0.0f, len, thick);
-        g.drawLine (0.0f, 0.0f, len, 0.0f, thick);
-        
-        // Left bottom
-        g.drawLine (0.0f, h, 0.0f, h - len, thick);
-        g.drawLine (0.0f, h, len, h, thick);
-        
-        // Right top
-        g.drawLine (w, 0.0f, w, len, thick);
-        g.drawLine (w, 0.0f, w - len, 0.0f, thick);
-        
-        // Right bottom
-        g.drawLine (w, h, w, h - len, thick);
-        g.drawLine (w, h, w - len, h, thick);
-    }
+        juce::Path path;
+
+        // vertical path
+        path.startNewSubPath (corner);
+        path.lineTo          (corner.x, corner.y + length);
+
+        // horizontal path
+        path.startNewSubPath (corner);
+        path.lineTo          (corner.x + length, corner.y);
+
+        g.strokePath (path,
+                      juce::PathStrokeType (thick),
+                      juce::AffineTransform::rotation (radian, corner.x, corner.y));
+
+        radian += juce::MathConstants<float>::halfPi;
+    };
 }
 
 void NumberBox::mouseDown (const juce::MouseEvent& event)
