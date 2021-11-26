@@ -19,7 +19,7 @@ juce::TextEditor* CustomLabel::createEditorComponent()
     ed->setJustification (juce::Justification::centred);
     ed->setColour (juce::TextEditor::backgroundColourId, juce::Colours::transparentWhite);
     ed->setInputRestrictions (5, "0123456789.");
-    ed->setIndents (4, -1);
+    ed->setIndents (4, 0);
 
     return ed;
 }
