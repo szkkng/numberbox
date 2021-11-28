@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../Resources/FuturaMedium.h"
 
 class CustomLabel : public juce::Label
 {
@@ -25,6 +26,8 @@ public:
 class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
+    CustomLookAndFeel();
+    
     juce::CaretComponent* createCaretComponent (juce::Component* keyFocusOwner) override;
     CustomLabel* createSliderTextBox (juce::Slider& slider) override;
 };

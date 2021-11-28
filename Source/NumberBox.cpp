@@ -32,6 +32,13 @@ void CustomLabel::editorShown (juce::TextEditor* editor)
 }
 
 //==============================================================================
+CustomLookAndFeel::CustomLookAndFeel()
+{
+    auto futuraMediumFont = juce::Typeface::createSystemTypefaceFor (FuturaMedium::FuturaMedium_otf,
+                                                                     FuturaMedium::FuturaMedium_otfSize);
+    setDefaultSansSerifTypeface (futuraMediumFont);
+}
+
 juce::CaretComponent* CustomLookAndFeel::createCaretComponent (juce::Component* keyFocusOwner)
 {
     auto caret = new juce::CaretComponent (keyFocusOwner);
@@ -50,7 +57,7 @@ CustomLabel* CustomLookAndFeel::createSliderTextBox (juce::Slider& slider)
     l->setColour (juce::Label::textWhenEditingColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::outlineWhenEditingColourId, juce::Colours::transparentWhite);
     l->setInterceptsMouseClicks (false, false);
-    l->setFont (18);
+    l->setFont (20);
                 
     return l;
 }

@@ -5,6 +5,7 @@ MainComponent::MainComponent()
 {
     setSize (500, 300);
     setWantsKeyboardFocus (true);
+    juce::LookAndFeel::setDefaultLookAndFeel (&customLookAndFeel);
     
     blueBox.setColour (juce::Slider::textBoxTextColourId, blue);
     blueBox.setColour (juce::Slider::textBoxOutlineColourId, blue);
@@ -22,6 +23,7 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent()
 {
+    juce::LookAndFeel::setDefaultLookAndFeel (nullptr);
 }
 
 //==============================================================================
