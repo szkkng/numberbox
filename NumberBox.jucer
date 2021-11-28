@@ -3,6 +3,13 @@
 <JUCERPROJECT id="EPB9Kd" name="NumberBox" projectType="guiapp" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="oHnOQk" name="NumberBox">
+    <GROUP id="{2A9CA1A6-27DB-2BD7-DC30-65A8EC56432F}" name="Resources">
+      <FILE id="JcfEnG" name="Futura-Medium.otf" compile="0" resource="1"
+            file="Resources/Futura-Medium.otf"/>
+      <FILE id="Y2WSJa" name="FuturaMedium.cpp" compile="1" resource="0"
+            file="Resources/FuturaMedium.cpp"/>
+      <FILE id="eR7CLO" name="FuturaMedium.h" compile="0" resource="0" file="Resources/FuturaMedium.h"/>
+    </GROUP>
     <GROUP id="{8A4BC2DE-B581-9704-B5A4-160D042A8FE4}" name="Source">
       <FILE id="nuxRcQ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="LhNIDa" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
