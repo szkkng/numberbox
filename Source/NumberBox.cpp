@@ -51,14 +51,14 @@ juce::CaretComponent* CustomLookAndFeel::createCaretComponent (juce::Component* 
 CustomLabel* CustomLookAndFeel::createSliderTextBox (juce::Slider& slider)
 {
     auto* l = new CustomLabel();
-    
+
     l->setJustificationType (juce::Justification::centred);
     l->setColour (juce::Label::textColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::textWhenEditingColourId, slider.findColour (juce::Slider::textBoxTextColourId));
     l->setColour (juce::Label::outlineWhenEditingColourId, juce::Colours::transparentWhite);
     l->setInterceptsMouseClicks (false, false);
     l->setFont (20);
-                
+
     return l;
 }
 
@@ -140,6 +140,16 @@ void NumberBox::mouseDown (const juce::MouseEvent& event)
     juce::Slider::mouseDown (event);
 
     setMouseCursor (juce::MouseCursor::NoCursor);
+}
+
+void NumberBox::mouseDrag (const juce::MouseEvent& event)
+{
+    juce::Slider::mouseDrag (event);
+
+    if (event.mods.isShiftDown())
+        setVelocityModeParameters (0.1, 1, 0.1, false);
+    else
+        setVelocityModeParameters (1.0, 1, 0.1, false);
 }
 
 void NumberBox::mouseUp (const juce::MouseEvent& event)
